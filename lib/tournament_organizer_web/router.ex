@@ -1,4 +1,5 @@
 defmodule TournamentOrganizerWeb.Router do
+  alias TournamentOrganizerWeb.PageController
   use TournamentOrganizerWeb, :router
 
   pipeline :browser do
@@ -18,6 +19,8 @@ defmodule TournamentOrganizerWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/index", MainViewController, :main_view
+    get "/index/:tournament_id", MainViewController, :tournament_view
   end
 
   # Other scopes may use custom stacks.
