@@ -25,7 +25,7 @@ defmodule TournamentOrganizer.Accounts.UserNotifier do
 
     ==============================
 
-    Hi #{user.email},
+    Hi #{String.capitalize(user.name)} #{String.capitalize(user.surename)},
 
     You can confirm your account by visiting the URL below:
 
@@ -45,7 +45,7 @@ defmodule TournamentOrganizer.Accounts.UserNotifier do
 
     ==============================
 
-    Hi #{user.email},
+    Hi #{String.capitalize(user.name)} #{String.capitalize(user.surename)},
 
     You can reset your password by visiting the URL below:
 
@@ -65,7 +65,7 @@ defmodule TournamentOrganizer.Accounts.UserNotifier do
 
     ==============================
 
-    Hi #{user.email},
+    Hi #{String.capitalize(user.name)} #{String.capitalize(user.surename)},
 
     You can change your email by visiting the URL below:
 

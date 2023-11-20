@@ -4,6 +4,8 @@ defmodule TournamentOrganizer.Accounts.User do
 
   schema "users" do
     field :email, :string
+    field :name, :string
+    field :surname, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
@@ -36,7 +38,8 @@ defmodule TournamentOrganizer.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :name, :surname])
+    |> validate_names()
     |> validate_email(opts)
     |> validate_password(opts)
   end
@@ -47,6 +50,15 @@ defmodule TournamentOrganizer.Accounts.User do
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
     |> validate_length(:email, max: 160)
     |> maybe_validate_unique_email(opts)
+  end
+
+  defp validate_names(changeset) do
+    changeset
+    |> validate_required([:name, :surname])
+    |> validate_format(:name, ~r/^[^[:digit:];,]+/, message: "Name can contain only letters")
+    |> validate_format(:surname, ~r/^[^[:digit:];,]+/, message: "Surname can contain only letters")
+    |> validate_length(:name, min: 1, max: 250)
+    |> validate_length(:surname, min: 1, max: 250)
   end
 
   defp validate_password(changeset, opts) do
