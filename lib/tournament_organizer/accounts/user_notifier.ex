@@ -25,7 +25,7 @@ defmodule TournamentOrganizer.Accounts.UserNotifier do
 
     ==============================
 
-    Hi #{String.capitalize(user.name)} #{String.capitalize(user.surename)},
+    Hi #{String.capitalize(user.name)} #{String.capitalize(user.surname)},
 
     You can confirm your account by visiting the URL below:
 
