@@ -12,15 +12,15 @@
     </script>
   </head>
   <body class="bg-white antialiased">
-    <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
+    <ul class="bg-white flex items-center justify-end gap-4 px-4 sm:px-6 lg:px-8 relative z-10">
       <%= if @current_user do %>
-        <li class="text-[0.8125rem] leading-6 text-zinc-900">
+        <li class="text-brand m-2 flex items-center text-sm font-light leading-6 bg-orange-50 rounded-lg px-2">
           <%= @current_user.email %>
         </li>
         <li>
           <.link
             href={~p"/users/settings"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+            class="text-brand m-2 flex items-center text-sm font-light leading-6 bg-inherit rounded-lg px-2 hover:bg-orange-50"
           >
             Settings
           </.link>
@@ -29,7 +29,7 @@
           <.link
             href={~p"/users/log_out"}
             method="delete"
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+            class="text-brand m-2 flex items-center text-sm font-light leading-6 bg-inherit rounded-lg px-2 hover:bg-orange-50"
           >
             Log out
           </.link>
@@ -38,7 +38,7 @@
         <li>
           <.link
             href={~p"/users/register"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+            class="text-brand m-2 flex items-center text-sm font-light leading-6 bg-inherit rounded-lg px-2 hover:bg-orange-50"
           >
             Register
           </.link>
@@ -46,7 +46,7 @@
         <li>
           <.link
             href={~p"/users/log_in"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+            class="text-brand m-2 flex items-center text-sm font-light leading-6 bg-inherit rounded-lg px-2 hover:bg-orange-50"
           >
             Log in
           </.link>
@@ -54,5 +54,13 @@
       <% end %>
     </ul>
     <%= @inner_content %>
+  <footer
+   class="bg-white flex flex-row justify-center items-center gap-4 px-4 sm:px-6 lg:px-8 relative z-10 border-t-2 border-slate-100"  >
+    <div class="flex flex-row items-center justify-center py-4">
+      <p class="text-sm text-gray-500 text-center">
+        <%= assigns[:page_title] || "TournamentOrganizer" %>
+      </p>
+    </div>
+  </footer>
   </body>
 </html>
