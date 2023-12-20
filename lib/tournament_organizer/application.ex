@@ -10,7 +10,8 @@ defmodule TournamentOrganizer.Application do
     children = [
       TournamentOrganizerWeb.Telemetry,
       TournamentOrganizer.Repo,
-      {DNSCluster, query: Application.get_env(:tournament_organizer, :dns_cluster_query) || :ignore},
+      {DNSCluster,
+       query: Application.get_env(:tournament_organizer, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: TournamentOrganizer.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: TournamentOrganizer.Finch},

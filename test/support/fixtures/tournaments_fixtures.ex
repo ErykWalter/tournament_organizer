@@ -10,9 +10,7 @@ defmodule TournamentOrganizer.TournamentsFixtures do
   def tournament_fixture(attrs \\ %{}) do
     {:ok, tournament} =
       attrs
-      |> Enum.into(%{
-
-      })
+      |> Enum.into(%{})
       |> TournamentOrganizer.Tournaments.create_tournament()
 
     tournament

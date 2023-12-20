@@ -1,0 +1,16 @@
+<.header>
+  Tournament <%= @tournament.id %>
+  <:subtitle>This is a tournament record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/tournaments/#{@tournament}/edit"}>
+      <.button>Edit tournament</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @tournament.name %></:item>
+  <:item title="Application deadline"><%= Date.to_string(@tournament.application_deadline) %></:item>
+</.list>
+
+<.back navigate={~p"/"}>Back to tournaments</.back>

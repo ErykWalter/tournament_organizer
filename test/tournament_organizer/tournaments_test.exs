@@ -34,12 +34,16 @@ defmodule TournamentOrganizer.TournamentsTest do
       tournament = tournament_fixture()
       update_attrs = %{}
 
-      assert {:ok, %Tournament{} = tournament} = Tournaments.update_tournament(tournament, update_attrs)
+      assert {:ok, %Tournament{} = tournament} =
+               Tournaments.update_tournament(tournament, update_attrs)
     end
 
     test "update_tournament/2 with invalid data returns error changeset" do
       tournament = tournament_fixture()
-      assert {:error, %Ecto.Changeset{}} = Tournaments.update_tournament(tournament, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Tournaments.update_tournament(tournament, @invalid_attrs)
+
       assert tournament == Tournaments.get_tournament!(tournament.id)
     end
 

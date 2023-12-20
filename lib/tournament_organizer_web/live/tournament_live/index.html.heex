@@ -1,0 +1,41 @@
+<.header>
+  Listing Tournaments
+  <:actions>
+    <.link patch={~p"/tournaments/new"}>
+      <.button>New Tournament</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="tournaments"
+  rows={@streams.tournaments}
+  row_click={fn {_id, tournament} -> JS.navigate(~p"/tournaments/#{tournament}") end}
+>
+  <:col label="Name" field={:name} />
+  <:action :let={{_id, tournament}}>
+    <div class="sr-only">
+      <.link navigate={~p"/tournaments/#{tournament}"}>Show</.link>
+    </div>
+    <.link patch={~p"/tournaments/#{tournament}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, tournament}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: tournament.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="tournament-modal" show on_cancel={JS.patch(~p"/tournaments")}>
+  <.live_component
+    module={TournamentOrganizerWeb.TournamentLive.FormComponent}
+    id={@tournament.id || :new}
+    title={@page_title}
+    action={@live_action}
+    tournament={@tournament}
+    patch={~p"/tournaments"}
+  />
+</.modal>

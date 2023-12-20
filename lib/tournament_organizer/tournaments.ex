@@ -21,6 +21,22 @@ defmodule TournamentOrganizer.Tournaments do
     Repo.all(Tournament)
   end
 
+  def list_tournaments_by_name do
+    Repo.all(from t in Tournament, order_by: [asc: t.name])
+  end
+
+  def list_tournaments_by_start_date do
+    Repo.all(from t in Tournament, order_by: [asc: t.start_date])
+  end
+
+  def filter_tournaments_by_start_date(start_date) do
+    Repo.all(from t in Tournament, where: t.start_date == ^start_date)
+  end
+
+  def preload_user(tournament) do
+    Repo.preload(tournament, :user)
+  end
+
   @doc """
   Gets a single tournament.
 

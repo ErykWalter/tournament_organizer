@@ -1,11 +1,24 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     TournamentOrganizer.Repo.insert!(%TournamentOrganizer.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+alias TournamentOrganizer.Accounts
+alias TournamentOrganizer.Tournaments.Tournament
+alias TournamentOrganizer.Tournaments
+
+# Create a user
+{:ok, user} =
+  Accounts.register_user(%{
+    email: "admin@admin.com",
+    password: "AdminAdmin123",
+    name: "admin",
+    surname: "admin"
+  })
+
+# Create a tournament
+for tournament <- ["Chess championship", "Football championship", "Basketball championship"] do
+  {:ok, _} =
+    Tournaments.create_tournament(%{
+      name: tournament,
+      application_deadline: Date.add(Date.utc_today(), 2),
+      max_participants: 10,
+      start_date: DateTime.add(DateTime.utc_now(), 7, :day),
+      user_id: user.id,
+    })
+end
