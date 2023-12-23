@@ -29,7 +29,12 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="tournament-modal" show on_cancel={JS.patch(~p"/tournaments")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="tournament-modal"
+  show
+  on_cancel={JS.patch(~p"/tournaments")}
+>
   <.live_component
     module={TournamentOrganizerWeb.TournamentLive.FormComponent}
     id={@tournament.id || :new}

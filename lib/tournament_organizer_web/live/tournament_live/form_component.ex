@@ -19,7 +19,6 @@ defmodule TournamentOrganizerWeb.TournamentLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-
         <:actions>
           <.button phx-disable-with="Saving...">Save Tournament</.button>
         </:actions>

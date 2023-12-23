@@ -9,7 +9,9 @@
 
 <.list>
   <:item title="Name"><%= @tournament.name %></:item>
-  <:item title="Application deadline"><%= Date.to_string(@tournament.application_deadline) %></:item>
+  <:item title="Application deadline">
+    <%= Date.to_string(@tournament.application_deadline) %>
+  </:item>
 </.list>
 
 <.back navigate={~p"/"}>Back to tournaments</.back>

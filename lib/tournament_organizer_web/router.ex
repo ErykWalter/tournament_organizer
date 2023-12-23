@@ -18,7 +18,7 @@ defmodule TournamentOrganizerWeb.Router do
   end
 
   scope "/tournaments", TournamentOrganizerWeb do
-    pipe_through [ :browser, :require_authenticated_user ]
+    pipe_through [:browser, :require_authenticated_user]
 
     resources "/", TournamentController, except: [:index, :show]
   end
@@ -29,17 +29,17 @@ defmodule TournamentOrganizerWeb.Router do
     get "tournaments/:id", TournamentController, :show
   end
 
-   #scope "/", TournamentOrganizerWeb do
-   #  pipe_through :browser
-   #  live "/tournaments", TournamentLive.Index, :index
-   #  live "/tournaments/new", TournamentLive.Index, :new
-   #  live "/tournaments/:id/edit", TournamentLive.Index, :edit
+  # scope "/", TournamentOrganizerWeb do
+  #  pipe_through :browser
+  #  live "/tournaments", TournamentLive.Index, :index
+  #  live "/tournaments/new", TournamentLive.Index, :new
+  #  live "/tournaments/:id/edit", TournamentLive.Index, :edit
 
-   #  live "/tournaments/:id", TournamentLive.Show, :show
-   #  live "/tournaments/:id/show/edit", TournamentLive.Show, :edit
-   #  get "/", TournamentController, :index
-   #  get "tournaments/:id", TournamentController, :show
-   #end
+  #  live "/tournaments/:id", TournamentLive.Show, :show
+  #  live "/tournaments/:id/show/edit", TournamentLive.Show, :edit
+  #  get "/", TournamentController, :index
+  #  get "tournaments/:id", TournamentController, :show
+  # end
   # Other scopes may use custom stacks.
   # scope "/api", TournamentOrganizerWeb do
   #   pipe_through :api

@@ -5,7 +5,6 @@ defmodule TournamentOrganizerWeb.TournamentController do
   alias TournamentOrganizer.Tournaments.Tournament
   alias TournamentOrganizer.Accounts
 
-  
   def index(conn, _params) do
     tournaments = Tournaments.list_tournaments()
     render(conn, :index, tournaments: tournaments)
@@ -20,6 +19,7 @@ defmodule TournamentOrganizerWeb.TournamentController do
     tournament_params = Map.put(tournament_params, "user_id", conn.assigns.current_user.id)
     start_date = Map.get(tournament_params, "start_date") <> "00Z"
     Map.put(tournament_params, "start_date", start_date)
+
     case Tournaments.create_tournament(tournament_params) do
       {:ok, tournament} ->
         conn

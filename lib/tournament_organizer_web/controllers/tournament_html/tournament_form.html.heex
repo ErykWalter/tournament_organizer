@@ -7,7 +7,7 @@
   <.input field={f[:max_participants]} type={:number} label="Max number of participants" />
   <!-- input for start date which will allow user to select date and time and put it in the form as DateTime object with :start_date atom -->
   <.input field={f[:start_date]} type="datetime-local" label="Start date" />
-  <% IO.inspect f %>
+  <% IO.inspect(f) %>
   <.input field={f[:application_deadline]} type={:date} label="Last day for signing up" />
   <:actions>
     <.button>Save Tournament</.button>

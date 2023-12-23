@@ -1,5 +1,4 @@
 alias TournamentOrganizer.Accounts
-alias TournamentOrganizer.Tournaments.Tournament
 alias TournamentOrganizer.Tournaments
 
 # Create a user
@@ -19,6 +18,6 @@ for tournament <- ["Chess championship", "Football championship", "Basketball ch
       application_deadline: Date.add(Date.utc_today(), 2),
       max_participants: 10,
       start_date: DateTime.add(DateTime.utc_now(), 7, :day),
-      user_id: user.id,
+      user_id: user.id
     })
 end

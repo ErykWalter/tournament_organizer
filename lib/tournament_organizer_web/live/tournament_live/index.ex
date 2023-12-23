@@ -33,7 +33,10 @@ defmodule TournamentOrganizerWeb.TournamentLive.Index do
   end
 
   @impl true
-  def handle_info({TournamentOrganizerWeb.TournamentLive.FormComponent, {:saved, tournament}}, socket) do
+  def handle_info(
+        {TournamentOrganizerWeb.TournamentLive.FormComponent, {:saved, tournament}},
+        socket
+      ) do
     {:noreply, stream_insert(socket, :tournaments, tournament)}
   end
 
