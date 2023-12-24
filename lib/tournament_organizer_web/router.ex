@@ -20,7 +20,13 @@ defmodule TournamentOrganizerWeb.Router do
   scope "/tournaments", TournamentOrganizerWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    resources "/", TournamentController, except: [:index, :show]
+    resources "/", TournamentController, only: [:new, :create]
+  end
+
+  scope "/tournaments", TournamentOrganizerWeb do
+    pipe_through [:browser, :require_authenticated_user, :is_authorized_to_edit]
+
+    resources "/", TournamentController, only: [:edit, :update, :delete]
   end
 
   scope "/", TournamentOrganizerWeb do

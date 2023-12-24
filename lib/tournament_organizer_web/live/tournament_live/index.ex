@@ -6,7 +6,14 @@ defmodule TournamentOrganizerWeb.TournamentLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :tournaments, Tournaments.list_tournaments())}
+    tournaments = Tournaments.fetch_page(nil, 1, 10) |> Tournaments.list_tournaments()
+
+    socket =
+      socket
+      |> assign(:page_size, 10)
+      |> assign(:page_number, 1)
+
+    {:ok, stream(socket, :tournaments, tournaments)}
   end
 
   @impl true

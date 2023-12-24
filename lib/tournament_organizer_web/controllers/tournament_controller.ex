@@ -3,7 +3,6 @@ defmodule TournamentOrganizerWeb.TournamentController do
 
   alias TournamentOrganizer.Tournaments
   alias TournamentOrganizer.Tournaments.Tournament
-  alias TournamentOrganizer.Accounts
 
   def index(conn, _params) do
     tournaments = Tournaments.list_tournaments()

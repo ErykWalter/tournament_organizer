@@ -60,6 +60,24 @@ defmodule TournamentOrganizer.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def user_exists?(id) when is_integer(id) do
+    User
+    |> where(id: ^id)
+    |> Repo.exists?()
+  end
+
+  defp preload_tournaments(%TournamentOrganizer.Accounts.User{} = user) do
+    Repo.preload(user, :tournaments)
+  end
+
+  @spec list_user_tournaments_ids(User.t()) :: [integer()]
+  def list_user_tournaments_ids(%TournamentOrganizer.Accounts.User{} = user) do
+    user
+    |> preload_tournaments()
+    |> then(fn user -> user.tournaments end)
+    |> Enum.reduce([], fn tournament, acc -> [tournament.id | acc] end)
+  end
+
   ## User registration
 
   @doc """
