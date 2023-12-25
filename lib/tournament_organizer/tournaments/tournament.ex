@@ -27,7 +27,7 @@ defmodule TournamentOrganizer.Tournaments.Tournament do
   end
 
   @doc false
-  @spec changeset(tournament, map) :: Ecto.Changeset.t()
+  @spec changeset(tournament, map()) :: Ecto.Changeset.t()
   def changeset(tournament, attrs) do
     tournament
     |> cast(attrs, [:name, :max_participants, :application_deadline, :start_date, :user_id])

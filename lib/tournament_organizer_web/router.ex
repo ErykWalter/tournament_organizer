@@ -35,21 +35,20 @@ defmodule TournamentOrganizerWeb.Router do
     get "tournaments/:id", TournamentController, :show
   end
 
-  # scope "/", TournamentOrganizerWeb do
-  #  pipe_through :browser
-  #  live "/tournaments", TournamentLive.Index, :index
-  #  live "/tournaments/new", TournamentLive.Index, :new
-  #  live "/tournaments/:id/edit", TournamentLive.Index, :edit
+  scope "/live", TournamentOrganizerWeb do
+    pipe_through :browser
+    live "/tournaments", TournamentLive.Index, :index
+    live "/tournaments/new", TournamentLive.Index, :new
+    live "/tournaments/:id/edit", TournamentLive.Index, :edit
 
-  #  live "/tournaments/:id", TournamentLive.Show, :show
-  #  live "/tournaments/:id/show/edit", TournamentLive.Show, :edit
-  #  get "/", TournamentController, :index
-  #  get "tournaments/:id", TournamentController, :show
-  # end
+    live "/tournaments/:id", TournamentLive.Show, :show
+    live "/tournaments/:id/show/edit", TournamentLive.Show, :edit
+  end
+
   # Other scopes may use custom stacks.
-  # scope "/api", TournamentOrganizerWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", TournamentOrganizerWeb do
+    pipe_through :api
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:tournament_organizer, :dev_routes) do

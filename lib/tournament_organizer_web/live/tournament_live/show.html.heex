@@ -2,21 +2,26 @@
   Tournament <%= @tournament.id %>
   <:subtitle>This is a tournament record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/tournaments/#{@tournament}/show/edit"} phx-click={JS.push_focus()}>
+    <.link patch={~p"/live/tournaments/#{@tournament}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit tournament</.button>
     </.link>
   </:actions>
 </.header>
 
-<.list></.list>
+<.list>
+  <:item title="Name"><%= @tournament.name %></:item>
+  <:item title="Application deadline">
+    <%= Date.to_string(@tournament.application_deadline) %>
+  </:item>
+</.list>
 
-<.back navigate={~p"/tournaments"}>Back to tournaments</.back>
+<.back navigate={~p"/live/tournaments"}>Back to tournaments</.back>
 
 <.modal
   :if={@live_action == :edit}
   id="tournament-modal"
   show
-  on_cancel={JS.patch(~p"/tournaments/#{@tournament}")}
+  on_cancel={JS.patch(~p"/live/tournaments/#{@tournament}")}
 >
   <.live_component
     module={TournamentOrganizerWeb.TournamentLive.FormComponent}
@@ -24,6 +29,6 @@
     title={@page_title}
     action={@live_action}
     tournament={@tournament}
-    patch={~p"/tournaments/#{@tournament}"}
+    patch={~p"/live/tournaments/#{@tournament}"}
   />
 </.modal>

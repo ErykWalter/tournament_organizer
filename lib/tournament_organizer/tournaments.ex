@@ -2,7 +2,6 @@ defmodule TournamentOrganizer.Tournaments do
   @moduledoc """
   The Tournaments context.
   """
-
   @type optional_query_param :: Ecto.Query.t() | nil
 
   import Ecto.Query, warn: false
@@ -15,57 +14,57 @@ defmodule TournamentOrganizer.Tournaments do
     |> Repo.all()
   end
 
-  @spec list_tournaments(optional_query_param) :: Ecto.Query.t()
-  def list_tournaments(nil) do
-    Tournament
-    |> Repo.all()
-  end
-
+  @spec list_tournaments(Ecto.Query.t() | nil) :: Ecto.Query.t()
   def list_tournaments(query) do
-    query
+    (query || Tournament)
     |> Repo.all()
   end
 
   @spec order_tournaments(optional_query_param, atom) :: Ecto.Query.t()
   def order_tournaments(query, field \\ :name) do
-    query
-    |> handle_query_argument()
+    (query || Tournament)
     |> order_by(asc: ^field)
   end
 
   @spec filter_tournaments_by_date(optional_query_param, Date.t()) :: Ecto.Query.t()
   def filter_tournaments_by_date(query, %Date{} = date) do
-    query
-    |> handle_query_argument()
+    (query || Tournament)
     |> where([t], t.application_deadline >= ^date)
+    |> where([t], t.start_date >= ^DateTime.new!(date, Time.utc_now()))
   end
 
-  @spec filter_tournaments_by_name(optional_query_param, name :: String.t()) :: Ecto.Query.t()
   def filter_tournaments_by_name(query, name) when is_binary(name) do
-    query
-    |> handle_query_argument()
+    (query || Tournament)
     |> where([t], ilike(t.name, ^"%#{name}%"))
   end
 
   @spec fetch_page(optional_query_param, Integer, Integer) :: Ecto.Query.t()
   def fetch_page(query, page_number, page_size) do
-    query
-    |> handle_query_argument()
+    (query || Tournament)
     |> limit(^page_size)
     |> offset(^page_size * (^page_number - 1))
   end
 
+  @doc """
+  Gets tournaments ready to be displayed on the index page.
+  """
+  @spec get_future_filtered_tournaments(String.t(), Integer.t(), Integer.t()) :: [term()]
+  def get_future_filtered_tournaments(name, page_number, page_size) do
+    Tournament
+    |> filter_tournaments_by_name(name)
+    |> filter_tournaments_by_date(Date.utc_today())
+    |> order_tournaments()
+    |> fetch_page(page_number, page_size)
+    |> Repo.all()
+  end
+
+  def count_tournaments() do
+    Tournament
+    |> Repo.aggregate(:count, :id)
+  end
+
   def preload_user(tournament) do
     Repo.preload(tournament, :user)
-  end
-
-  @spec handle_query_argument(Ecto.Query.t() | Atom) :: Ecto.Query.t()
-  defp handle_query_argument(nil) do
-    Tournament
-  end
-
-  defp handle_query_argument(%Ecto.Query{} = query) do
-    query
   end
 
   @doc """

@@ -6,12 +6,16 @@ defmodule TournamentOrganizerWeb.TournamentLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    tournaments = Tournaments.fetch_page(nil, 1, 10) |> Tournaments.list_tournaments()
+    tournaments =
+      Tournaments.get_future_filtered_tournaments("", 1, 10)
 
     socket =
       socket
       |> assign(:page_size, 10)
       |> assign(:page_number, 1)
+      |> assign(:items_count, tournaments |> length())
+      |> assign(name_search: to_form(%{"name" => ""}))
+      |> assign(name: "")
 
     {:ok, stream(socket, :tournaments, tournaments)}
   end
@@ -53,5 +57,46 @@ defmodule TournamentOrganizerWeb.TournamentLive.Index do
     {:ok, _} = Tournaments.delete_tournament(tournament)
 
     {:noreply, stream_delete(socket, :tournaments, tournament)}
+  end
+
+  def handle_event("next_page", _params, socket) do
+    change_current_page(1, socket)
+  end
+
+  def handle_event("prev_page", _params, socket) do
+    change_current_page(-1, socket)
+  end
+
+  defp change_current_page(amount, socket) when is_integer(amount) do
+    socket =
+      socket
+      |> assign(:page_number, max(socket.assigns.page_number + amount, 0))
+
+    tournaments =
+      Tournaments.get_future_filtered_tournaments(
+        socket.assigns.name,
+        socket.assigns.page_number,
+        socket.assigns.page_size
+      )
+
+    {:noreply, stream(socket, :tournaments, tournaments, reset: true)}
+  end
+
+  def handle_event("filter", %{"name" => name}, socket) do
+    tournaments =
+      Tournaments.get_future_filtered_tournaments(
+        name,
+        socket.assigns.page_number,
+        socket.assigns.page_size
+      )
+
+    socket =
+      socket
+      |> assign(:page_number, 1)
+      |> assign(:items_count, tournaments |> length())
+      |> assign(:name, name)
+      |> assign(name_search: to_form(%{"name" => name}))
+
+    {:noreply, stream(socket, :tournaments, tournaments, reset: true)}
   end
 end

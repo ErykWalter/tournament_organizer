@@ -215,7 +215,6 @@ defmodule TournamentOrganizerWeb.UserAuth do
   Used for routes that only creator of a resource can access.
   """
   def is_authorized_to_edit(conn, _opts) do
-    IEx.pry()
     if conn.assigns[:current_user] &&
          elem(Integer.parse(conn.params["id"]), 0) in Accounts.list_user_tournaments_ids(
            conn.assigns[:current_user]

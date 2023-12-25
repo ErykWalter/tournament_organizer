@@ -7,33 +7,43 @@
   </:actions>
 </.header>
 
+<.form phx-submit="filter" phx-disable-with="Loading..." for={@name_search} class="flex">
+  <.input name="name" type="search" value={@name_search.name} placeholder="Search..." />
+</.form>
 <.table
   id="tournaments"
   rows={@streams.tournaments}
-  row_click={fn {_id, tournament} -> JS.navigate(~p"/tournaments/#{tournament}") end}
+  row_click={fn {_id, tournament} -> JS.navigate(~p"/live/tournaments/#{tournament}") end}
 >
-  <:col label="Name" field={:name} />
-  <:action :let={{_id, tournament}}>
-    <div class="sr-only">
-      <.link navigate={~p"/tournaments/#{tournament}"}>Show</.link>
-    </div>
-    <.link patch={~p"/tournaments/#{tournament}/edit"}>Edit</.link>
-  </:action>
-  <:action :let={{id, tournament}}>
-    <.link
-      phx-click={JS.push("delete", value: %{id: tournament.id}) |> hide("##{id}")}
-      data-confirm="Are you sure?"
-    >
-      Delete
-    </.link>
-  </:action>
+  <:col :let={{_id, tournament}} label="Name"><%= tournament.name %></:col>
+  <:col :let={{_id, tournament}} label="Start date">
+    <%= Date.to_string(DateTime.to_date(tournament.start_date)) %>
+  </:col>
 </.table>
+<div class="m-1 flex divide-x divide-gray-800 row justify-center">
+  <.button
+    phx-click="prev_page"
+    phx-disable-with="Loading..."
+    disabled={@page_number == 1}
+    class="rounded-r-none border-r-0"
+  >
+    <.icon name="hero-chevron-left" class="h-3 w-3" />
+  </.button>
+  <.button
+    phx-click="next_page"
+    phx-disable-with="Loading..."
+    disabled={@page_number == 2}
+    class="rounded-l-none border-l-0"
+  >
+    <.icon name="hero-chevron-right" class="h-3 w-3" />
+  </.button>
+</div>
 
 <.modal
   :if={@live_action in [:new, :edit]}
   id="tournament-modal"
   show
-  on_cancel={JS.patch(~p"/tournaments")}
+  on_cancel={JS.patch(~p"/live/tournaments")}
 >
   <.live_component
     module={TournamentOrganizerWeb.TournamentLive.FormComponent}
@@ -41,6 +51,6 @@
     title={@page_title}
     action={@live_action}
     tournament={@tournament}
-    patch={~p"/tournaments"}
+    patch={~p"/live/tournaments"}
   />
 </.modal>
