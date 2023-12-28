@@ -19,6 +19,10 @@ defmodule TournamentOrganizerWeb.TournamentLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
+        <.input field={@form[:name]} label="Tournament Name" />
+        <.input field={@form[:max_participants]} type="number" label="Max number of participants" />
+        <.input field={@form[:start_date]} type="datetime-local" label="Start date" />
+        <.input field={@form[:application_deadline]} type="date" label="Last day for signing up" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Tournament</.button>
         </:actions>

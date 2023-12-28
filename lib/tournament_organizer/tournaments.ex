@@ -63,6 +63,11 @@ defmodule TournamentOrganizer.Tournaments do
     |> Repo.aggregate(:count, :id)
   end
 
+  def count_tournaments(query) do
+    (query || Tournament)
+    |> Repo.aggregate(:count)
+  end
+
   def preload_user(tournament) do
     Repo.preload(tournament, :user)
   end

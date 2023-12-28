@@ -17,32 +17,39 @@ defmodule TournamentOrganizerWeb.Router do
     plug :accepts, ["json"]
   end
 
+  #scope "/tournaments", TournamentOrganizerWeb do
+  #  pipe_through [:browser, :require_authenticated_user]
+
+  #  resources "/", TournamentController, only: [:new, :create]
+  #end
+
+  #scope "/tournaments", TournamentOrganizerWeb do
+  #  pipe_through [:browser, :require_authenticated_user, :is_authorized_to_edit]
+
+  #  resources "/", TournamentController, only: [:edit, :update, :delete]
+  #end
+
+  #scope "/", TournamentOrganizerWeb do
+  #  pipe_through :browser
+  #  get "/", TournamentController, :index
+  #  get "tournaments/:id", TournamentController, :show
+  #end
+
+  scope "/", TournamentOrganizerWeb do
+    pipe_through :browser
+    live "/", TournamentLive.Index, :index
+    live "/tournaments/:id", TournamentLive.Show, :show
+  end
+
   scope "/tournaments", TournamentOrganizerWeb do
     pipe_through [:browser, :require_authenticated_user]
-
-    resources "/", TournamentController, only: [:new, :create]
+    live "new", TournamentLive.Index, :new
   end
 
   scope "/tournaments", TournamentOrganizerWeb do
     pipe_through [:browser, :require_authenticated_user, :is_authorized_to_edit]
-
-    resources "/", TournamentController, only: [:edit, :update, :delete]
-  end
-
-  scope "/", TournamentOrganizerWeb do
-    pipe_through :browser
-    get "/", TournamentController, :index
-    get "tournaments/:id", TournamentController, :show
-  end
-
-  scope "/live", TournamentOrganizerWeb do
-    pipe_through :browser
-    live "/tournaments", TournamentLive.Index, :index
-    live "/tournaments/new", TournamentLive.Index, :new
-    live "/tournaments/:id/edit", TournamentLive.Index, :edit
-
-    live "/tournaments/:id", TournamentLive.Show, :show
-    live "/tournaments/:id/show/edit", TournamentLive.Show, :edit
+    live ":id/show/edit", TournamentLive.Index, :new
+    live ":id/edit", TournamentLive.Index, :new
   end
 
   # Other scopes may use custom stacks.
