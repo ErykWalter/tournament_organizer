@@ -17,16 +17,44 @@ defmodule TournamentOrganizerWeb.Router do
     plug :accepts, ["json"]
   end
 
+  #scope "/tournaments", TournamentOrganizerWeb do
+  #  pipe_through [:browser, :require_authenticated_user]
+
+  #  resources "/", TournamentController, only: [:new, :create]
+  #end
+
+  #scope "/tournaments", TournamentOrganizerWeb do
+  #  pipe_through [:browser, :require_authenticated_user, :is_authorized_to_edit]
+
+  #  resources "/", TournamentController, only: [:edit, :update, :delete]
+  #end
+
+  #scope "/", TournamentOrganizerWeb do
+  #  pipe_through :browser
+  #  get "/", TournamentController, :index
+  #  get "tournaments/:id", TournamentController, :show
+  #end
+
+  scope "/tournaments", TournamentOrganizerWeb do
+    pipe_through [:browser, :require_authenticated_user]
+    resources "/", TournamentController, only: [:new, :create]
+  end
+
+  scope "/tournaments", TournamentOrganizerWeb do
+    pipe_through [:browser, :require_authenticated_user, :is_authorized_to_edit]
+    resources "/", TournamentController, only: [:edit, :update, :delete]
+  end
+
   scope "/", TournamentOrganizerWeb do
     pipe_through :browser
-
-    get "/", PageController, :home
+    get "/", TournamentController, :index
+    get "/tournaments/:id", TournamentController, :show
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", TournamentOrganizerWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", TournamentOrganizerWeb do
+    pipe_through :api
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:tournament_organizer, :dev_routes) do

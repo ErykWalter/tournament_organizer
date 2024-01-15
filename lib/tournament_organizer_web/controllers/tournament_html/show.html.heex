@@ -1,0 +1,17 @@
+<.header>
+  <%= @tournament.name %>
+  <:actions>
+    <.link :if={@current_user && @tournament.user.id == @current_user.id} href={~p"/tournaments/#{@tournament}/edit"}>
+      <.button>Edit tournament</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @tournament.name %></:item>
+  <:item title="Application deadline">
+    <%= Date.to_string(@tournament.application_deadline) %>
+  </:item>
+</.list>
+
+<.back navigate={~p"/"}>Back to tournaments</.back>

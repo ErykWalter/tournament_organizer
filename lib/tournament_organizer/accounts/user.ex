@@ -9,6 +9,7 @@ defmodule TournamentOrganizer.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    has_many :tournaments, TournamentOrganizer.Tournaments.Tournament
 
     timestamps(type: :utc_datetime)
   end
@@ -56,7 +57,9 @@ defmodule TournamentOrganizer.Accounts.User do
     changeset
     |> validate_required([:name, :surname])
     |> validate_format(:name, ~r/^[^[:digit:];,]+/, message: "Name can contain only letters")
-    |> validate_format(:surname, ~r/^[^[:digit:];,]+/, message: "Surname can contain only letters")
+    |> validate_format(:surname, ~r/^[^[:digit:];,]+/,
+      message: "Surname can contain only letters"
+    )
     |> validate_length(:name, min: 1, max: 250)
     |> validate_length(:surname, min: 1, max: 250)
   end
@@ -67,7 +70,9 @@ defmodule TournamentOrganizer.Accounts.User do
     |> validate_length(:password, min: 12, max: 72)
     |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/,
+      message: "at least one digit or punctuation character"
+    )
     |> maybe_hash_password(opts)
   end
 
@@ -146,7 +151,10 @@ defmodule TournamentOrganizer.Accounts.User do
   If there is no user or the user doesn't have a password, we call
   `Bcrypt.no_user_verify/0` to avoid timing attacks.
   """
-  def valid_password?(%TournamentOrganizer.Accounts.User{hashed_password: hashed_password}, password)
+  def valid_password?(
+        %TournamentOrganizer.Accounts.User{hashed_password: hashed_password},
+        password
+      )
       when is_binary(hashed_password) and byte_size(password) > 0 do
     Bcrypt.verify_pass(password, hashed_password)
   end
