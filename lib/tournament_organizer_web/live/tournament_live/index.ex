@@ -86,7 +86,7 @@ defmodule TournamentOrganizerWeb.TournamentLive.Index do
       |> assign(:name, name)
       |> assign(name_search: to_form(%{"name" => name}))
    
-    {:noreply, push_patch(socket, to: "/live/tournaments?page=#{page}", replace: true)}
+    {:noreply, push_patch(socket, to: ~p"/?page=#{page}", replace: true)}
   end
 
   defp get_tournaments_query(name) when is_binary(name) do

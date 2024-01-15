@@ -1,19 +1,19 @@
 <.header>
   Listing Tournaments
   <:actions>
-    <.link patch={~p"/live/tournaments/new"}>
+    <.link patch={~p"/tournaments/new"}>
       <.button>New Tournament</.button>
     </.link>
   </:actions>
 </.header>
 
 <.form phx-submit="filter" phx-disable-with="Loading..." for={@name_search} class="flex">
-  <.input name="name" type="search" value={@name_search.name} placeholder="Search..." />
+  <.input name="name" type="search" value={@name_search} placeholder="Search..." />
 </.form>
 <.table
   id="tournaments"
   rows={@tournaments}
-  row_click={fn tournament -> JS.navigate(~p"/live/tournaments/#{tournament.id}") end}
+  row_click={fn tournament -> JS.navigate(~p"/tournaments/#{tournament.id}") end}
 >
   <:col :let={tournament} label="Name"><%= tournament.name %></:col>
   <:col :let={tournament} label="Start date">
@@ -22,7 +22,7 @@
 </.table>
 <div class="m-1 flex divide-x divide-gray-800 row justify-center">
   <.button
-    phx-click={JS.patch(~p"/live/tournaments?page=#{@page_number - 1}")}
+    phx-click={JS.patch(~p"/tournaments?page=#{@page_number - 1}")}
     phx-disable-with="Loading..."
     disabled={@page_number == 1}
     class="rounded-r-none border-r-0"
@@ -33,7 +33,7 @@
     phx-disable-with="Loading..."
     disabled={@page_number >= @max_pages}
     class="rounded-l-none border-l-0"
-    phx-click={JS.patch(~p"/live/tournaments?page=#{@page_number + 1}")}
+    phx-click={JS.patch(~p"/tournaments?page=#{@page_number + 1}")}
   >
     <.icon name="hero-chevron-right" class="h-3 w-3" />
   </.button>
@@ -42,8 +42,7 @@
 <.modal
   :if={@live_action in [:new, :edit]}
   id="tournament-modal"
-  show
-  on_cancel={JS.patch(~p"/live/tournaments")}
+  on_cancel={JS.patch(~p"/")}
 >
   <.live_component
     module={TournamentOrganizerWeb.TournamentLive.FormComponent}
@@ -51,6 +50,6 @@
     title={@page_title}
     action={@live_action}
     tournament={@tournament}
-    patch={~p"/live/tournaments"}
+    patch={~p"/"}
   />
 </.modal>

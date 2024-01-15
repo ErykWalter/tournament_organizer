@@ -9,6 +9,14 @@ defmodule TournamentOrganizerWeb.TournamentLive.Show do
   end
 
   @impl true
+  def handle_params(%{"id" => "new"}, _, socket) do
+    {:noreply, socket |> assign(:page_title, "New Tournament")}
+  end
+
+  def handle_params(%{"id" => "edit"}, _, socket) do
+    {:noreply, socket |> assign(:page_title, "Edit Tournament")}
+  end
+
   def handle_params(%{"id" => id}, _, socket) do
     {:noreply,
      socket

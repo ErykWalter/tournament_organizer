@@ -1,7 +1,7 @@
 <.header>
   <%= @tournament.name %>
   <:actions>
-    <.link href={~p"/tournaments/#{@tournament}/edit"}>
+    <.link :if={@current_user && @tournament.user.id == @current_user.id} href={~p"/tournaments/#{@tournament}/edit"}>
       <.button>Edit tournament</.button>
     </.link>
   </:actions>

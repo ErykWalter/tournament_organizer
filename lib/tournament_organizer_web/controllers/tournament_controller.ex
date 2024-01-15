@@ -1,17 +1,24 @@
 defmodule TournamentOrganizerWeb.TournamentController do
   use TournamentOrganizerWeb, :controller
 
+  require Logger
   alias TournamentOrganizer.Tournaments
+  alias TournamentOrganizer.Tournaments.Pager
   alias TournamentOrganizer.Tournaments.Tournament
 
-  def index(conn, _params) do
-    tournaments = Tournaments.list_tournaments()
-    render(conn, :index, tournaments: tournaments)
+  def index(conn, params) do
+    page = Map.get(params, "page", "1") |> String.to_integer()
+    name = Map.get(params, "search", "")
+    page = Pager.get_tournaments(name, page)
+    page = Map.put(page, :search, name) |> dbg()
+    Logger.debug("Page: #{inspect(page)}")
+    render(conn, :index, page)
   end
 
   def new(conn, _params) do
     changeset = Tournaments.change_tournament(%Tournament{})
-    render(conn, :new, changeset: changeset)
+    Logger.debug("New tournament changeset: #{inspect(changeset)}")
+    render(conn, :new, changeset: changeset) |> dbg()
   end
 
   def create(conn, %{"tournament" => tournament_params}) do
@@ -31,7 +38,10 @@ defmodule TournamentOrganizerWeb.TournamentController do
   end
 
   def show(conn, %{"id" => id}) do
-    tournament = Tournaments.get_tournament!(id)
+    tournament = 
+      Tournaments.get_tournament!(id)
+      |> Tournaments.preload_user()
+      |> dbg()
     render(conn, :show, tournament: tournament)
   end
 

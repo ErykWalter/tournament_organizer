@@ -7,6 +7,10 @@
   </:actions>
 </.header>
 
+<.form class="flex">
+  <.input name="search" type="search" value={""} placeholder="Search..." />
+</.form>
+
 <.table id="tournaments" rows={@tournaments} row_click={&JS.navigate(~p"/tournaments/#{&1}")}>
   <:col :let={tournament} label="Name"><%= tournament.name %></:col>
   <:col :let={tournament} label="Start date">
@@ -16,11 +20,26 @@
     <div class="sr-only">
       <.link navigate={~p"/tournaments/#{tournament}"}>Show</.link>
     </div>
-    <.link navigate={~p"/tournaments/#{tournament}/edit"}>Edit</.link>
-  </:action>
-  <:action :let={tournament}>
-    <.link href={~p"/tournaments/#{tournament}"} method="delete" data-confirm="Are you sure?">
-      Delete
-    </.link>
   </:action>
 </.table>
+<!-- Pagination controls -->
+<div class="m-1 flex divide-x divide-gray-800 row justify-center">
+  <.link href={~p"/?search=#{@search}&page=#{@page_number - 1}"}>
+    <.button
+      phx-disable-with="Loading..."
+      disabled={@page_number == 1}
+      class="rounded-r-none border-r-0"
+    >
+      <.icon name="hero-chevron-left" class="h-3 w-3" />
+    </.button>
+  </.link>
+  <.link href={~p"/?search=#{@search}&page=#{@page_number + 1}"}>
+    <.button
+      phx-disable-with="Loading..."
+      disabled={@page_number >= @total_pages}
+      class="rounded-l-none border-l-0"
+    >
+      <.icon name="hero-chevron-right" class="h-3 w-3" />
+    </.button>
+  </.link>
+</div>
