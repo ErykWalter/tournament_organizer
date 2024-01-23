@@ -2,6 +2,7 @@ defmodule TournamentOrganizerWeb.TournamentController do
   use TournamentOrganizerWeb, :controller
 
   require Logger
+  alias OpenStreetMap
   alias TournamentOrganizer.Tournaments
   alias TournamentOrganizer.Tournaments.Pager
   alias TournamentOrganizer.Tournaments.Tournament
@@ -41,8 +42,10 @@ defmodule TournamentOrganizerWeb.TournamentController do
     tournament = 
       Tournaments.get_tournament!(id)
       |> Tournaments.preload_user()
-      |> dbg()
-    render(conn, :show, tournament: tournament)
+    
+    address = "centrum wykładowe politechnika, Poznań, Poland"
+    map_info = get_info_for_map_display(address)
+    render(conn, :show, [tournament: tournament, map_info: map_info, address: address])
   end
 
   def edit(conn, %{"id" => id}) do
@@ -72,5 +75,41 @@ defmodule TournamentOrganizerWeb.TournamentController do
     conn
     |> put_flash(:info, "Tournament deleted successfully.")
     |> redirect(to: ~p"/")
+  end
+
+  defp get_info_for_map_display(address) when is_binary(address) do
+      case OpenStreetMap.search([q: address, format: "json", accept_language: "en"]) do
+        {:ok, []} -> default_info()
+        {:ok, [head | _tail]} -> extract_map_info_from_response(head)
+        {:error, _reason} -> default_info()
+      end
+  end
+
+  defp extract_map_info_from_response(response) do
+    case response do
+      %{"boundingbox" => [minlat, maxlat, minlon, maxlon], "lat" => lat, "lon" => lon} ->
+        %{
+          minlon: minlon,
+          minlat: minlat,
+          maxlon: maxlon,
+          maxlat: maxlat,
+          lat: lat,
+          lon: lon,
+          marker: true
+        }
+      _ -> default_info()
+    end
+  end
+
+  defp default_info() do
+    %{
+      lat: "52.39427025",
+      lon: "16.918130386528922",
+      marker: false,
+      minlon: "16.9167733",
+      minlat: "52.3939514",
+      maxlon: "16.9188347",
+      maxlat: "52.3949330"
+    }
   end
 end
