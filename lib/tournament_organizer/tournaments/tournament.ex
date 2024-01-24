@@ -21,7 +21,12 @@ defmodule TournamentOrganizer.Tournaments.Tournament do
     field :application_deadline, :date
     field :max_participants, :integer
     field :start_date, :utc_datetime
+    field :address, :string
     belongs_to :user, TournamentOrganizer.Accounts.User
+
+    embeds_many :sponsor_logos, SponsorLogo, on_replace: :delete do
+      field :url, :string
+    end
 
     timestamps(type: :utc_datetime)
   end
@@ -30,7 +35,15 @@ defmodule TournamentOrganizer.Tournaments.Tournament do
   @spec changeset(tournament, map()) :: Ecto.Changeset.t()
   def changeset(tournament, attrs) do
     tournament
-    |> cast(attrs, [:name, :max_participants, :application_deadline, :start_date, :user_id])
+    |> cast(attrs, [
+      :name,
+      :max_participants,
+      :application_deadline,
+      :start_date,
+      :user_id,
+      :address
+    ])
+    |> cast_embed(:sponsor_logos, required: false, with: &logo_changeset/2)
     |> validate_required([:name, :application_deadline, :max_participants, :start_date, :user_id])
     |> validate_number(:max_participants, greater_than: 0)
     |> validate_change(:application_deadline, fn :application_deadline, application_deadline ->
@@ -76,5 +89,11 @@ defmodule TournamentOrganizer.Tournaments.Tournament do
       not Accounts.user_exists?(user_id) -> add_error(changeset, :user_id, "Wrong user")
       true -> changeset
     end
+  end
+
+  defp logo_changeset(logo, attrs) do
+    logo
+    |> cast(attrs, [:url])
+    |> validate_required([:url])
   end
 end

@@ -1,17 +1,53 @@
 <.header>
   <%= @tournament.name %>
   <:actions>
-    <.link :if={@current_user && @tournament.user.id == @current_user.id} href={~p"/tournaments/#{@tournament}/edit"}>
+    <.link
+      :if={@current_user && @tournament.user.id == @current_user.id}
+      href={~p"/tournaments/#{@tournament}/edit"}
+    >
       <.button>Edit tournament</.button>
+    </.link>
+    <.link
+      :if={@current_user && Date.before?(Date.utc_today(), @tournament.application_deadline)}
+      href={~p"/tournaments/#{@tournament}/participate"}
+    >
+      <.button>Participate</.button>
+    </.link>
+    <.link
+      :if={DateTime.after?(DateTime.utc_now(), @tournament.start_date)}
+      href={~p"/tournaments/#{@tournament}/participate"}
+    >
+      <.button>Participate</.button>
     </.link>
   </:actions>
 </.header>
 
-<.list>
-  <:item title="Name"><%= @tournament.name %></:item>
-  <:item title="Application deadline">
-    <%= Date.to_string(@tournament.application_deadline) %>
-  </:item>
-</.list>
+<%= if DateTime.before?(DateTime.utc_now, @tournament.start_date) do %>
+  <.list>
+    <:item title="Name"><%= @tournament.name %></:item>
+    <:item title="Application deadline">
+      <%= Date.to_string(@tournament.application_deadline) %>
+    </:item>
+  </.list>
+
+  <.map
+    minlon={@map_info.minlon}
+    minlat={@map_info.minlat}
+    maxlon={@map_info.maxlon}
+    maxlat={@map_info.maxlat}
+    lat={@map_info.lat}
+    lon={@map_info.lon}
+    marker={@map_info.marker}
+    address={@address}
+  />
+<% else %>
+  <div id="bracket-element" class="m-4 flex justify-center">
+    <script>
+      var bracketData = <%= raw Jason.encode!(@bracket) %>;
+    </script>
+  </div>
+<% end %>
 
 <.back navigate={~p"/"}>Back to tournaments</.back>
+
+<.sponsor_grid tournament={@tournament} />

@@ -6,6 +6,7 @@ defmodule TournamentOrganizer.Tournaments do
 
   import Ecto.Query, warn: false
   alias TournamentOrganizer.Repo
+  alias TournamentOrganizer.SponsorLogo
 
   alias TournamentOrganizer.Tournaments.Tournament
 
