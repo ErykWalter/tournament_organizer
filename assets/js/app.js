@@ -21,6 +21,13 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
+import { createBracket } from 'bracketry';
+
+const wrapper = document.querySelector('#bracket-element');
+if (typeof bracketData !== 'undefined') {
+    const data = bracketData;
+    createBracket(data, wrapper);
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})

@@ -6,6 +6,7 @@
     frameborder="0"
     style="border:0"
     src={"https://www.openstreetmap.org/export/embed.html?bbox=#{@minlon},#{@minlat},#{@maxlon},#{@maxlat}&layer=mapnik&#{if @marker, do: "marker=" <> @lat <> "," <> @lon, else: ""}"}
-    allowfullscreen>
+    allowfullscreen
+  >
   </iframe>
 </section>

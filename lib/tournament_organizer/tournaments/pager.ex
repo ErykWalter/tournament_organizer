@@ -4,7 +4,8 @@ defmodule TournamentOrganizer.Tournaments.Pager do
 
   def get_tournaments(search_name, page_number, page_size \\ 10) do
     tournaments = get_future_filtered_tournaments(search_name, page_number, page_size)
-    total_pages = 
+
+    total_pages =
       Tournament
       |> filter_tournaments_by_name(search_name)
       |> filter_tournaments_by_date(Date.utc_today())
@@ -12,6 +13,11 @@ defmodule TournamentOrganizer.Tournaments.Pager do
       |> (fn count -> Float.ceil(count / page_size) end).()
       |> dbg()
 
-    %{page_number: page_number, page_size: page_size, total_pages: total_pages, tournaments: tournaments}
+    %{
+      page_number: page_number,
+      page_size: page_size,
+      total_pages: total_pages,
+      tournaments: tournaments
+    }
   end
 end

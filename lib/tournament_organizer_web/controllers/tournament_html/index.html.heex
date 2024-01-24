@@ -8,7 +8,7 @@
 </.header>
 
 <.form class="flex">
-  <.input name="search" type="search" value={""} placeholder="Search..." />
+  <.input name="search" type="search" value="" placeholder="Search..." />
 </.form>
 
 <.table id="tournaments" rows={@tournaments} row_click={&JS.navigate(~p"/tournaments/#{&1}")}>

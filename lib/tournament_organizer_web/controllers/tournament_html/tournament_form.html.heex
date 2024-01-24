@@ -9,6 +9,8 @@
   <.input field={f[:start_date]} type="datetime-local" label="Start date" />
   <% IO.inspect(f) %>
   <.input field={f[:application_deadline]} type="date" label="Last day for signing up" />
+  <.input field={f[:address]} label="Address" />
+  <.input field={f[:logos]} type="file" label="Logos" accept="image/jpeg, image/png" multiple />
   <:actions>
     <.button>Save Tournament</.button>
   </:actions>

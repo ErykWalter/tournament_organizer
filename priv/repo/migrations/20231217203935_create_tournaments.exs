@@ -8,6 +8,8 @@ defmodule TournamentOrganizer.Repo.Migrations.CreateTournaments do
       add :max_participants, :integer
       add :start_date, :utc_datetime
       add :user_id, references(:users, on_delete: :delete_all), null: false
+      add :address, :string
+      add :sponsor_logos, :map
 
       timestamps(type: :utc_datetime)
     end

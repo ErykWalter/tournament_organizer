@@ -10,7 +10,7 @@ defmodule TournamentOrganizerWeb.TournamentHTML do
   attr :action, :string, required: true
 
   def tournament_form(assigns)
-  
+
   attr :minlon, :string, required: true
   attr :minlat, :string, required: true
   attr :maxlon, :string, required: true
@@ -21,4 +21,22 @@ defmodule TournamentOrganizerWeb.TournamentHTML do
   attr :address, :string, required: true
 
   def map(assigns)
+
+  attr :tournament, TournamentOrganizer.Tournaments.Tournament, required: true
+
+  def sponsor_grid(assigns) do
+    ~H"""
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <%= for sponsor_logo <- @tournament.sponsor_logos do %>
+        <div class="relative flex items-center justify-center p-4 group transition-all duration-300 ease-in-out hover:bg-gray-700 hover:bg-opacity-75">
+          <img
+            src={"#{TournamentOrganizerWeb.Endpoint.url}#{TournamentOrganizer.SponsorLogo.url({sponsor_logo.url, @tournament}, :thumb)}"}
+            alt="Sponsor Logo"
+            class="block mx-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
+          />
+        </div>
+      <% end %>
+    </div>
+    """
+  end
 end
