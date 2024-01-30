@@ -1,8 +1,15 @@
 # TournamentOrganizer
 
+Required software:
+
+    * Postgres database / docker
+    * Elixir [check this guide](https://elixir-lang.org/install.html)
+    * [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html)
+
 To start your Phoenix server:
 
   * Run `mix setup` to install and setup dependencies
+  * create a Postgres database with command `docker run --name tournament-db -e POSTGRES_PASSWORD=postgres -d -p 5432:5432 postgres`
   * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.

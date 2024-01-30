@@ -23,6 +23,7 @@ defmodule TournamentOrganizer.Tournaments.Tournament do
     field :start_date, :utc_datetime
     field :address, :string
     belongs_to :user, TournamentOrganizer.Accounts.User
+    has_many :participations, TournamentOrganizer.Participations.Participation
 
     embeds_many :sponsor_logos, SponsorLogo, on_replace: :delete do
       field :url, :string
@@ -63,6 +64,7 @@ defmodule TournamentOrganizer.Tournaments.Tournament do
     |> validate_dates()
     |> validate_user_id()
     |> unique_constraint(:name)
+    |> dbg
   end
 
   @spec validate_dates(Ecto.Changeset.t()) :: Ecto.Changeset.t()

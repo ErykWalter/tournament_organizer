@@ -1,0 +1,12 @@
+<.simple_form :let={f} for={@changeset} action={@action}>
+  <.error :if={@changeset.action}>
+    Oops, something went wrong! Please check the errors below.
+  </.error>
+  <.input field={f[:user_id]} type="hidden" />
+  <.input field={f[:tournament_id]} type="hidden" />
+  <.input field={f[:ranking]} type="number" label="Ranking" />
+  <.input field={f[:licence_number]} type="text" label="Licence number" />
+  <:actions>
+    <.button>Save Participation</.button>
+  </:actions>
+</.simple_form>

@@ -1,0 +1,18 @@
+<.header>
+  Participation
+  <:subtitle><%= @participation.tournament.name %></:subtitle>
+  <:actions>
+    <.link navigate={~p"/tournaments/#{@participation.tournament_id}"}>
+      <.button>
+        View tournament
+      </.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Ranking"><%= @participation.ranking %></:item>
+  <:item title="Licence number"><%= @participation.licence_number %></:item>
+</.list>
+
+<.back navigate={~p"/"}>Back to tournaments</.back>

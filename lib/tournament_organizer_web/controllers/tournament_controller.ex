@@ -2,10 +2,12 @@ defmodule TournamentOrganizerWeb.TournamentController do
   use TournamentOrganizerWeb, :controller
 
   require Logger
+  require IEx
   alias OpenStreetMap
   alias TournamentOrganizer.Tournaments
   alias TournamentOrganizer.Tournaments.Pager
   alias TournamentOrganizer.Tournaments.Tournament
+  alias TournamentOrganizer.Participations
   alias TournamentOrganizer.SponsorLogo
 
   def index(conn, params) do
@@ -20,22 +22,21 @@ defmodule TournamentOrganizerWeb.TournamentController do
   def new(conn, _params) do
     changeset = Tournaments.change_tournament(%Tournament{})
     Logger.debug("New tournament changeset: #{inspect(changeset)}")
-    render(conn, :new, changeset: changeset) |> dbg()
+    render(conn, :new, changeset: changeset)
   end
 
   def create(conn, %{"tournament" => tournament_params}) do
     tournament_params = Map.put(tournament_params, "user_id", conn.assigns.current_user.id)
-    start_date = Map.get(tournament_params, "start_date") <> "00Z"
-    Map.put(tournament_params, "start_date", start_date)
 
     case Tournaments.create_tournament(tournament_params) do
-      {:ok, tournament} ->
+      {:ok, tournament_id} ->
         conn
         |> put_flash(:info, "Tournament created successfully.")
-        |> redirect(to: ~p"/tournaments/#{tournament}")
+        |> redirect(to: ~p"/tournaments/#{tournament_id}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, :new, changeset: changeset)
+        conn
+        |> render(:new, changeset: changeset)
     end
   end
 
@@ -48,11 +49,19 @@ defmodule TournamentOrganizerWeb.TournamentController do
     map_info = get_info_for_map_display(address)
     bracket = default_bracket()
 
+    already_participate? =
+      if conn.assigns.current_user do
+        Participations.already_participate?(tournament.id, conn.assigns.current_user.id)
+      else
+        false
+      end
+
     render(conn, :show,
       tournament: tournament,
       map_info: map_info,
       address: address,
-      bracket: bracket
+      bracket: bracket,
+      already_participate?: already_participate?
     )
   end
 
@@ -65,18 +74,7 @@ defmodule TournamentOrganizerWeb.TournamentController do
   def update(conn, %{"id" => id, "tournament" => tournament_params}) do
     tournament = Tournaments.get_tournament!(id)
     logos = tournament_params["logos"]
-
-    sponsor_logos =
-      for logo <- logos do
-        case SponsorLogo.store({logo, tournament}) do
-          {:ok, name} -> %{url: name}
-          _ -> :error
-        end
-      end
-
-    tournament_params = Map.put(tournament_params, "sponsor_logos", sponsor_logos)
-
-    dbg(tournament_params)
+    tournament_params = process_logos(logos, tournament, tournament_params)
 
     case Tournaments.update_tournament(tournament, tournament_params) do
       {:ok, tournament} ->
@@ -98,13 +96,20 @@ defmodule TournamentOrganizerWeb.TournamentController do
     |> redirect(to: ~p"/")
   end
 
-  def delete(conn, %{"id" => id}) do
-    tournament = Tournaments.get_tournament!(id)
-    {:ok, _tournament} = Tournaments.delete_tournament(tournament)
+  defp process_logos(logos, tournament, tournament_params) do
+    if logos do
+      sponsor_logos =
+        for logo <- logos do
+          case SponsorLogo.store({logo, tournament}) do
+            {:ok, name} -> %{url: name}
+            _ -> :error
+          end
+        end
 
-    conn
-    |> put_flash(:info, "Tournament deleted successfully.")
-    |> redirect(to: ~p"/")
+      Map.put(tournament_params, "sponsor_logos", sponsor_logos) |> dbg
+    else
+      tournament_params
+    end
   end
 
   defp get_info_for_map_display(nil) do

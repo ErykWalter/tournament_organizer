@@ -10,6 +10,7 @@ defmodule TournamentOrganizer.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
     has_many :tournaments, TournamentOrganizer.Tournaments.Tournament
+    has_many :participations, TournamentOrganizer.Participations.Participation
 
     timestamps(type: :utc_datetime)
   end
