@@ -153,4 +153,9 @@ defmodule TournamentOrganizer.Tournaments do
   def change_tournament(%Tournament{} = tournament, attrs \\ %{}) do
     Tournament.changeset(tournament, attrs)
   end
+
+  def partipants_exceed_limit?(tournament_id, count) when is_integer(count) do
+    tournament = get_tournament!(tournament_id)
+    tournament.max_participants < count
+  end
 end

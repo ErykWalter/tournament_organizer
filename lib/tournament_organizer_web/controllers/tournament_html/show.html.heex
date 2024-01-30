@@ -8,14 +8,10 @@
       <.button>Edit tournament</.button>
     </.link>
     <.link
-      :if={@current_user && Date.before?(Date.utc_today(), @tournament.application_deadline)}
-      href={~p"/tournaments/#{@tournament}/participate"}
-    >
-      <.button>Participate</.button>
-    </.link>
-    <.link
-      :if={DateTime.after?(DateTime.utc_now(), @tournament.start_date)}
-      href={~p"/tournaments/#{@tournament}/participate"}
+      :if={
+        !@already_participate? && Date.after?(@tournament.application_deadline, Date.utc_today())
+      }
+      href={~p"/participations/new?tournament_id=#{@tournament}"}
     >
       <.button>Participate</.button>
     </.link>
@@ -27,6 +23,12 @@
     <:item title="Name"><%= @tournament.name %></:item>
     <:item title="Application deadline">
       <%= Date.to_string(@tournament.application_deadline) %>
+    </:item>
+    <:item title="Start date">
+      <%= Date.to_string(@tournament.start_date) %>
+    </:item>
+    <:item title="Organizer">
+      <%= @tournament.user.name <> " " <> @tournament.user.surname %>
     </:item>
   </.list>
 

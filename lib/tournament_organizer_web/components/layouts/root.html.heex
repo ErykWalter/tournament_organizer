@@ -14,6 +14,14 @@
   <body class="bg-white antialiased">
     <ul class="bg-white flex items-center justify-end gap-4 px-4 sm:px-6 lg:px-8 relative z-10">
       <%= if @current_user do %>
+        <li>
+          <.link
+            href={~p"/participations"}
+            class="text-brand m-2 flex items-center text-sm font-light leading-6 bg-inherit rounded-lg px-2 hover:bg-orange-50"
+          >
+            Participations
+          </.link>
+        </li>
         <li class="text-brand m-2 flex items-center text-sm font-light leading-6 bg-orange-50 rounded-lg px-2">
           <%= @current_user.email %>
         </li>

@@ -34,6 +34,10 @@ defmodule TournamentOrganizerWeb.Router do
   #  get "/", TournamentController, :index
   #  get "tournaments/:id", TournamentController, :show
   # end
+  scope "/participations", TournamentOrganizerWeb do
+    pipe_through [:browser, :require_authenticated_user]
+    resources "/", ParticipationController
+  end
 
   scope "/tournaments", TournamentOrganizerWeb do
     pipe_through [:browser, :require_authenticated_user]
