@@ -1,0 +1,3 @@
+default._domainkey	IN	TXT	( "v=DKIM1; k=rsa; "
+	  "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6YoWFUrZ6djmTEpAlVTcbV/mz0dD4UjGXYHooR73fiFfBpaN6Do8TvOhCQ1ZiTpjRvYv6In+fFH6C3UIdU3DFiXkppYyxU19SbVxseSMPjLp9GEhbXchRpCRcfwvYywRDbbwM/McVEzncOwFZLWYAMSgZcl3rycF91T08Jf66lr1RwApEJuD7BWzH/q52z9duAyJtRziuVURUK"
+	  "BABGHAaaLgNWHSqRvp9NlwJhCp0oE25KD4ofRnMuoFGqBpnYohHkKWSxq8RKSHG+oLxVvsf6lGD+6QR7R5K8gQHlICpYpEMcvCsiQqmqrpvwndEujs0pUs652dlvMDCZ4PSRgcPwIDAQAB" )  ; ----- DKIM key default for tournamentorganizer.com

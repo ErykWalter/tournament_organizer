@@ -8,7 +8,7 @@ defmodule TournamentOrganizer.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"TournamentOrganizer", "contact@example.com"})
+      |> from({"TournamentOrganizer", "erykwalter2002@gmail.com"})
       |> subject(subject)
       |> text_body(body)
 
@@ -45,7 +45,7 @@ defmodule TournamentOrganizer.Accounts.UserNotifier do
 
     ==============================
 
-    Hi #{String.capitalize(user.name)} #{String.capitalize(user.surename)},
+    Hi #{String.capitalize(user.name)} #{String.capitalize(user.surname)},
 
     You can reset your password by visiting the URL below:
 

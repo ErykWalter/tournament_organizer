@@ -2,6 +2,7 @@ alias TournamentOrganizer.Accounts
 alias TournamentOrganizer.Tournaments
 alias TournamentOrganizer.Tournaments.Tournament
 alias TournamentOrganizer.Repo
+alias TournamentOrganizer.Participations
 require Logger
 
 user_password = "UserUser12345"
@@ -166,4 +167,25 @@ past_event = %Tournament{
   user_id: user1.id
 }
 
-Repo.insert!(past_event)
+past_event = Repo.insert!(past_event)
+
+Participations.create_participation(%{
+  user_id: "#{user1.id}",
+  tournament_id: "#{past_event.id}",
+  licence_number: "1234567890",
+  ranking: 1
+})
+
+Participations.create_participation(%{
+  user_id: user2.id,
+  tournament_id: past_event.id,
+  licence_number: "qwerty",
+  ranking: 2
+})
+
+Participations.create_participation(%{
+  user_id: Enum.random(users).id,
+  tournament_id: past_event.id,
+  licence_number: "asdfgh",
+  ranking: 3
+})

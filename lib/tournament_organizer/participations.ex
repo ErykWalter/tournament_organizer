@@ -26,6 +26,11 @@ defmodule TournamentOrganizer.Participations do
     Repo.all(from p in Participation, where: p.user_id == ^user_id) |> Repo.preload(:tournament)
   end
 
+  def list_participations_by_tournament(tournament_id) do
+    Repo.all(from p in Participation, where: p.tournament_id == ^tournament_id)
+    |> Repo.preload(:tournament)
+  end
+
   @doc """
   Gets a single participation.
 
@@ -55,6 +60,8 @@ defmodule TournamentOrganizer.Participations do
 
   """
   def create_participation(attrs \\ %{}) do
+    IO.inspect(attrs)
+
     Repo.transaction(fn ->
       case %Participation{}
            |> Participation.changeset(attrs)
@@ -73,7 +80,6 @@ defmodule TournamentOrganizer.Participations do
           Repo.rollback(changeset)
       end
     end)
-    |> dbg
   end
 
   @doc """
