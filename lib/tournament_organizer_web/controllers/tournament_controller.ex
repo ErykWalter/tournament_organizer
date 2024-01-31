@@ -9,6 +9,7 @@ defmodule TournamentOrganizerWeb.TournamentController do
   alias TournamentOrganizer.Tournaments.Tournament
   alias TournamentOrganizer.Participations
   alias TournamentOrganizer.SponsorLogo
+  alias TournamentOrganizer.Ladder
 
   def index(conn, params) do
     page = Map.get(params, "page", "1") |> String.to_integer()
@@ -45,9 +46,19 @@ defmodule TournamentOrganizerWeb.TournamentController do
       Tournaments.get_tournament!(id)
       |> Tournaments.preload_user()
 
+    if !Date.before?(Date.utc_today(), tournament.application_deadline) do
+      Ladder.Initializer.is_initialized?(tournament.id) ||
+        Ladder.Initializer.init_ladder(tournament.id)
+    end
+
     address = tournament.address
     map_info = get_info_for_map_display(address)
-    bracket = default_bracket()
+
+    bracket =
+      case Ladder.Initializer.is_initialized?(tournament.id) do
+        true -> Ladder.Format.display_ladder(tournament.id)
+        false -> default_bracket()
+      end
 
     already_participate? =
       if conn.assigns.current_user do

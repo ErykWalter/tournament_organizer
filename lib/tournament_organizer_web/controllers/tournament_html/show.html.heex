@@ -1,5 +1,9 @@
 <.header>
   <%= @tournament.name %>
+  <:subtitle :if={!Date.before?(DateTime.utc_now(), @tournament.application_deadline)}>
+    Time to apply is over
+  </:subtitle>
+
   <:actions>
     <.link
       :if={@current_user && @tournament.user.id == @current_user.id}
@@ -18,37 +22,40 @@
   </:actions>
 </.header>
 
-<%= if DateTime.before?(DateTime.utc_now, @tournament.start_date) do %>
-  <.list>
-    <:item title="Name"><%= @tournament.name %></:item>
-    <:item title="Application deadline">
-      <%= Date.to_string(@tournament.application_deadline) %>
-    </:item>
-    <:item title="Start date">
-      <%= Date.to_string(@tournament.start_date) %>
-    </:item>
-    <:item title="Organizer">
-      <%= @tournament.user.name <> " " <> @tournament.user.surname %>
-    </:item>
-  </.list>
-
-  <.map
-    minlon={@map_info.minlon}
-    minlat={@map_info.minlat}
-    maxlon={@map_info.maxlon}
-    maxlat={@map_info.maxlat}
-    lat={@map_info.lat}
-    lon={@map_info.lon}
-    marker={@map_info.marker}
-    address={@address}
-  />
-<% else %>
+<%= if !Date.before?(DateTime.utc_now, @tournament.application_deadline) do %>
   <div id="bracket-element" class="m-4 flex justify-center">
     <script>
       var bracketData = <%= raw Jason.encode!(@bracket) %>;
     </script>
   </div>
 <% end %>
+
+<.list>
+  <:item title="Name"><%= @tournament.name %></:item>
+  <:item title="Application deadline">
+    <%= Date.to_string(@tournament.application_deadline) %>
+  </:item>
+  <:item title="Start date">
+    <%= Date.to_string(@tournament.start_date) %>
+  </:item>
+  <:item title="debug">
+    <%= "#{DateTime.before?(DateTime.utc_now(), @tournament.start_date)}" %>
+  </:item>
+  <:item title="Organizer">
+    <%= @tournament.user.name <> " " <> @tournament.user.surname %>
+  </:item>
+</.list>
+
+<.map
+  minlon={@map_info.minlon}
+  minlat={@map_info.minlat}
+  maxlon={@map_info.maxlon}
+  maxlat={@map_info.maxlat}
+  lat={@map_info.lat}
+  lon={@map_info.lon}
+  marker={@map_info.marker}
+  address={@address}
+/>
 
 <.back navigate={~p"/"}>Back to tournaments</.back>
 

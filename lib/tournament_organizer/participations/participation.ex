@@ -7,6 +7,7 @@ defmodule TournamentOrganizer.Participations.Participation do
     field :licence_number, :string
     belongs_to :user, TournamentOrganizer.Users.User
     belongs_to :tournament, TournamentOrganizer.Tournaments.Tournament
+    has_many :matches, TournamentOrganizer.Matches.Match
 
     timestamps(type: :utc_datetime)
   end
