@@ -29,7 +29,12 @@ config :tournament_organizer, TournamentOrganizerWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :tournament_organizer, TournamentOrganizer.Mailer, adapter: Swoosh.Adapters.Local
+config :tournament_organizer, TournamentOrganizer.Mailer,
+  adapter: Swoosh.Adapters.Local
+  #api_key: System.get_env("MAILJET_API_KEY"),
+  #secret: System.get_env("MAILJET_SECRET_KEY")
+
+config :swoosh, :api_client, Swoosh.ApiClient.Finch
 
 # Configure esbuild (the version is required)
 config :esbuild,

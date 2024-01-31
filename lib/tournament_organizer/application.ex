@@ -14,7 +14,7 @@ defmodule TournamentOrganizer.Application do
        query: Application.get_env(:tournament_organizer, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: TournamentOrganizer.PubSub},
       # Start the Finch HTTP client for sending emails
-      {Finch, name: TournamentOrganizer.Finch},
+      {Finch, name: Swoosh.Finch},
       # Start a worker by calling: TournamentOrganizer.Worker.start_link(arg)
       # {TournamentOrganizer.Worker, arg},
       # Start to serve requests, typically the last entry
